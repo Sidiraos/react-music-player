@@ -39,7 +39,6 @@ const AudioPannel = () => {
 		audio.addEventListener('ended', () => {
 			dispatch(setIsPlaying(false));
 			dispatch(setIsSongLoading(false));
-
 		});
 
 		audio.addEventListener('loadedmetadata', () => {
@@ -70,8 +69,7 @@ const AudioPannel = () => {
 			});
 			audio.removeEventListener('ended', () => {
 				dispatch(setIsPlaying(false));
-			dispatch(setIsSongLoading(false));
-
+				dispatch(setIsSongLoading(false));
 			});
 		};
 	}, [currentSong]);
@@ -90,7 +88,7 @@ const AudioPannel = () => {
 					<NextPrev type={'next'} />
 				</div>
 				<TrackBar />
-				<audio src={song} autoPlay type="audio/mp3" ref={audioRef}>
+				<audio src={song} autoPlay type="audio/mp3" ref={audioRef} id='audio'>
 					Your browser does not support the audio element.
 				</audio>
 			</div>

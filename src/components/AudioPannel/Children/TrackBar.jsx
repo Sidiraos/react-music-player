@@ -1,20 +1,26 @@
 import Timer from './Timer';
-import { useSelector } from 'react-redux';
-import currentTimeToPourcent from '../../../utils/currentTimeToPourcent';
-const TrackBar = () => {
-	const currentTime = useSelector((state) => state.musics.currentTime);
-	const duration = useSelector((state) => state.musics.duration);
-	const pourcent = currentTimeToPourcent(currentTime, duration);
-	// console.log(pourcent);
+import ProgressBar from './ProgressBar';
+import { useRef } from 'react';
+import { useDispatch , useSelector} from 'react-redux';
+import { setCurrentTime } from '../../../redux/Slices/musicStore';
 
+const TrackBar = () => {
+    const trackBarRef = useRef();
+    const dispatch = useDispatch();
+    const duration = useSelector((state) => state.musics.duration);
+    const handleTrackBarClicked = (e) => {
+        const rect = trackBarRef.current.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const newCurrentTimeValue = Math.floor(clickX / rect.width * duration) + 1;
+        duration && dispatch(setCurrentTime(newCurrentTimeValue));
+        if(duration)document.getElementById('audio').currentTime = newCurrentTimeValue;
+        // console.log('trackbar touched')
+    }
 	return (
 		<div>
 			<div className="relative mb-2">
-				<div className="absolute bg-black w-full h-2 rounded-full">
-					<div
-						className={`h-full bg-blue-500 rounded-full`}
-                        style={{ width: `${pourcent}%` }}
-					></div>
+				<div className="absolute bg-black w-full h-2 rounded-full cursor-pointer" ref = {trackBarRef} onClick={handleTrackBarClicked}>
+                    <ProgressBar />
 				</div>
 			</div>
 			<Timer />
