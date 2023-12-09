@@ -29,8 +29,8 @@ const ErrorFetching = ({ errMsg }) => {
 			</div>
 			<div className="p-6 text-center">
 				<div className="text-sm [&amp;_p]:leading-relaxed mb-4">
-					The page you were looking for could not be found.
-					{errMsg}
+					<p>We could not found music from the cloud</p>
+					<p className="font-bold">{errMsg}</p>
 				</div>
 			</div>
 		</div>

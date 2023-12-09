@@ -24,7 +24,7 @@ const Playist = () => {
 		fetch(url, options)
 			.then((response) => {
 				if (!response.ok) {
-					throw Error('Could not get that song from soundcloud');
+					throw new Error('Could not get that song from cloud');
 				}
 				return response.json();
 			})
@@ -54,7 +54,7 @@ const Playist = () => {
 	const displayUI = isLoading ? (
 		<IsLoading />
 	) : errMsg ? (
-		<ErrorFetching erroMsg={errMsg} />
+		<ErrorFetching errMsg={errMsg} />
 	) : (
 		<ShowTrackList />
 	);

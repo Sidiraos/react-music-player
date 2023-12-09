@@ -21,56 +21,49 @@ const AudioPannel = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		// console.log('use effect');
 		const audio = audioRef.current;
 		dispatch(setDuration(Math.floor(audio.duration)));
 		dispatch(setIsSongLoading(true));
 
-		// console.dir(audio);
-
-		audio.addEventListener('pause', () => {
-			dispatch(setIsPlaying(false));
-			dispatch(setIsSongLoading(false));
-		});
-		audio.addEventListener('play', () => {
-			dispatch(setIsPlaying(true));
-			dispatch(setIsSongLoading(false));
-		});
-		audio.addEventListener('ended', () => {
-			dispatch(setIsPlaying(false));
-			dispatch(setIsSongLoading(false));
-		});
-
-		audio.addEventListener('loadedmetadata', () => {
-			// console.log('loading music');
+		const handleChangeMetadata = () => {
 			dispatch(setIsSongLoading(true));
 			dispatch(setDuration(Math.floor(audio.duration)));
-		});
-		audio.addEventListener('timeupdate', () => {
+		};
+
+		const handlePause = () => {
+			dispatch(setIsPlaying(false));
+			dispatch(setIsSongLoading(false));
+		};
+		const handlePlay = () => {
+			dispatch(setIsPlaying(true));
+			dispatch(setIsSongLoading(false));
+		};
+		const handleEnded = () => {
+			dispatch(setIsPlaying(false));
+			dispatch(setIsSongLoading(false));
+		};
+
+		const handleTimeUpdate = () => {
 			dispatch(setCurrentTime(Math.floor(audio.currentTime)));
-		});
+		};
+
+		// console.dir(audio);
+		audio.addEventListener('loadeddata', handleChangeMetadata);
+		audio.addEventListener('loadedmetadata', handleChangeMetadata);
+		window.addEventListener('load', handleChangeMetadata);
+		audio.addEventListener('pause', handlePause);
+		audio.addEventListener('play', handlePlay);
+		audio.addEventListener('ended', handleEnded);
+		audio.addEventListener('timeupdate', handleTimeUpdate);
 
 		return () => {
-			audio.removeEventListener('timeupdate', () => {
-				dispatch(setCurrentTime(Math.floor(audio.currentTime)));
-			});
-			audio.removeEventListener('loadedmetadata', () => {
-				// console.log('loading music');
-				dispatch(setIsSongLoading(true));
-				dispatch(setDuration(Math.floor(audio.duration)));
-			});
-			audio.removeEventListener('pause', () => {
-				dispatch(setIsPlaying(false));
-				dispatch(setIsSongLoading(false));
-			});
-			audio.removeEventListener('play', () => {
-				dispatch(setIsPlaying(true));
-				dispatch(setIsSongLoading(false));
-			});
-			audio.removeEventListener('ended', () => {
-				dispatch(setIsPlaying(false));
-				dispatch(setIsSongLoading(false));
-			});
+			audio.removeEventListener('loadeddata', handleChangeMetadata);
+			audio.removeEventListener('loadedmetadata', handleChangeMetadata);
+			window.removeEventListener('load', handleChangeMetadata);
+			audio.removeEventListener('pause', handlePause);
+			audio.removeEventListener('play', handlePlay);
+			audio.removeEventListener('ended', handleEnded);
+			audio.removeEventListener('timeupdate', handleTimeUpdate);
 		};
 	}, [currentSong]);
 
@@ -78,8 +71,8 @@ const AudioPannel = () => {
 		isPlaying ? audioRef.current.pause() : audioRef.current.play();
 	};
 	return (
-		<footer className="bg-gradient-to-r from-slate-900 to-slate-700  text-slate-200 select-none">
-			<div className="sm:max-w-3xl sm:mx-auto w-full px-10 py-5 flex flex-col justify-center gap-4">
+		<footer className="bg-gradient-to-r from-slate-900 to-slate-700  text-slate-200 select-none min-h-[232px]">
+			<div className="sm:max-w-3xl sm:mx-auto w-full px-10 py-5 flex flex-col justify-center gap-4 h-full">
 				<MetaData />
 				<div className="flex justify-center gap-4 items-center">
 					<NextPrev type={'prev'} />
@@ -87,7 +80,14 @@ const AudioPannel = () => {
 					<NextPrev type={'next'} />
 				</div>
 				<TrackBar />
-				<audio src={song} autoPlay type="audio/mp3" ref={audioRef} id='audio'>
+				<audio
+					src={song}
+					// autoPlay={(duration > 0 && !duration) && true}
+					autoPlay
+					type="audio/mp3"
+					ref={audioRef}
+					id="audio"
+				>
 					Your browser does not support the audio element.
 				</audio>
 			</div>
