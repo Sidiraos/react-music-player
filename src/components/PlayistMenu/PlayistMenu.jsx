@@ -12,9 +12,9 @@ const PlayistMenu = () => {
 	) : (
 		<ImageLoading />
 	);
-
+		
 	return (
-		<header className="bg-slate-800 h-[70vh] overflow-y-auto p-5 relative">
+		<header className="overflow-y-auto p-5 relative">
 			<h1 className="text-gray-200 max-w-xl mt-20 text-2xl sm:text-2xl mx-auto xl:fixed">
 				PlayerMania - Your songs.
 			</h1>

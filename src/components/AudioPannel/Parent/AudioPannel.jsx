@@ -77,10 +77,9 @@ const AudioPannel = () => {
 	const playPauseSong = () => {
 		isPlaying ? audioRef.current.pause() : audioRef.current.play();
 	};
-
 	return (
-		<footer className="bg-gradient-to-r from-slate-900 to-slate-700 min-h-[30vh] text-slate-200 select-none">
-			<div className="max-w-3xl mx-auto  px-10 pt-5 pb-2 flex flex-col justify-center gap-4">
+		<footer className="bg-gradient-to-r from-slate-900 to-slate-700  text-slate-200 select-none">
+			<div className="sm:max-w-3xl sm:mx-auto w-full px-10 py-5 flex flex-col justify-center gap-4">
 				<MetaData />
 				<div className="flex justify-center gap-4 items-center">
 					<NextPrev type={'prev'} />
